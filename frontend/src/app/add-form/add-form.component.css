@@ -1,0 +1,36 @@
+.add {
+  background-color: #fff;
+  color: black;
+  margin-left: 50px;  
+  box-shadow: 0px 35px 50px rgba( 0, 0, 0, 0.2 );
+  width: 500px;
+}
+
+.add fieldset {
+  border: none;
+}
+
+.add h3 {
+  margin-left: 15px;
+  padding-top: 5px;
+}
+
+.add input {
+  margin-left: 5px;
+  margin-bottom: 5px;
+}
+
+.add span {
+  margin-left: 5px;
+  margin-bottom: 0px;
+  color:rgb(236, 99, 99);
+}
+
+.add button {
+  margin-left: 10px;
+  margin-bottom: 10px;
+}
+
+.wrong-format {
+  border: 1px solid rgb(236, 99, 99);
+}

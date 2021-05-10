@@ -1,0 +1,33 @@
+<section class="add">
+  <h3>Добавление/редактирование студента</h3>
+  <form [formGroup]="form" novalidate (ngSubmit)="onSubmit()">
+    <fieldset formGroupName="fullName">
+      <label>Фамилия</label>
+      <input name="last-name-edit" formControlName="lastName" [class.wrong-format] = "check(lastName)">
+      <span *ngIf="check(lastName)">{{getError("fullName.lastName")}}</span>
+      <br>
+      <label>Имя</label>
+      <input name="first-name-edit" formControlName="firstName" [class.wrong-format] = "check(firstName)">
+      <span *ngIf="check(firstName)">{{getError("fullName.firstName")}}</span>
+      <br>
+      <label>Отчество</label>
+      <input name="middle-name-edit" formControlName="middleName" [class.wrong-format] = "check(middleName)">
+      <span *ngIf="check(middleName)">{{getError("fullName.middleName")}}</span>
+      <br>
+      <span *ngIf="fullName && fullName.invalid && (fullName.dirty || fullName.touched)">
+        {{getError("fullName")}}</span>
+    </fieldset>
+    <fieldset>
+      <label>Дата рождения</label>
+      <input type="date" name="birth-edit" formControlName="birth" [class.wrong-format] = "check(birth)">
+      <span *ngIf="check(birth)">{{getError("birth")}}</span>
+    </fieldset>
+    <fieldset>
+      <label>Средняя оценка</label>
+      <input name="averageMark-edit" formControlName="averageMark" [class.wrong-format] = "check(averageMark)">
+      <span *ngIf="check(averageMark)">{{getError("averageMark")}}</span>
+    </fieldset>
+    <button>Сохранить</button>
+    <button type="button" (click)="cancel()">Отменить</button>
+  </form>
+</section>

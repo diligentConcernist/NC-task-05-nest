@@ -1,0 +1,79 @@
+[
+  {
+    "lastName": "Абрамов",
+    "firstName": "Дмитрий",
+    "middleName": "Артемьевич",
+    "averageMark": 4.98,
+    "birth": "1991-02-13"
+  },
+  {
+    "lastName": "Александрова",
+    "firstName": "Екатерина",
+    "middleName": "Александровна",
+    "averageMark": 4.25,
+    "birth": "1971-10-27"
+  },
+  {
+    "lastName": "Алексеев",
+    "firstName": "Захар",
+    "middleName": "Матвеевич",
+    "averageMark": 3.01,
+    "birth": "1970-05-04"
+  },
+  {
+    "lastName": "Андреева",
+    "firstName": "Полина",
+    "middleName": "Дмитриевна",
+    "averageMark": 2.95,
+    "birth": "1986-10-06"
+  },
+  {
+    "lastName": "Андреева",
+    "firstName": "Валерия",
+    "middleName": "Григорьевна",
+    "averageMark": 3.45,
+    "birth": "1981-03-23"
+  },
+  {
+    "lastName": "Борисов",
+    "firstName": "Александр",
+    "middleName": "Маркович",
+    "averageMark": 2.05,
+    "birth": "1991-05-26"
+  },
+  {
+    "lastName": "Быков",
+    "firstName": "Тимофей",
+    "middleName": "Миронович",
+    "averageMark": 5.00,
+    "birth": "1978-05-27"
+  },
+  {
+    "lastName": "Быкова",
+    "firstName": "Елизавета",
+    "middleName": "Константиновна",
+    "averageMark": 3.08,
+    "birth": "2000-12-29"
+  },
+  {
+    "lastName": "Дроздов",
+    "firstName": "Михаил",
+    "middleName": "Елисеевич",
+    "averageMark": 2.47,
+    "birth": "1986-10-23"
+  },
+  {
+    "lastName": "Капустина",
+    "firstName": "Елизавета",
+    "middleName": "Дмитриевна",
+    "averageMark": 1.04,
+    "birth": "1981-12-23"
+  },
+  {
+    "lastName": "сОкОлОвА",
+    "firstName": "арИНА",
+    "middleName": "ИваНОвна",
+    "averageMark": 3.54,
+    "birth": "1976-01-17"
+  }
+]

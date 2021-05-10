@@ -1,0 +1,106 @@
+<header class="header">
+  <h1>Таблица студентов</h1>
+</header>
+
+<main>
+  <section class="table-wrapper">
+    <button type="button" (click)="edit(null)">Добавить студента</button>
+    <table>
+      <thead>
+        <tr>
+          <th>Фамилия
+            <button type="button" (click)="sortLastNameAsc()">↑</button>
+            <button type="button" (click)="sortLastNameDesc()">↓</button>
+          </th>
+          <th>Имя
+            <button type="button" (click)="sortFirstNameAsc()">↑</button>
+            <button type="button" (click)="sortFirstNameDesc()">↓</button>
+          </th>
+          <th>Отчество
+            <button type="button" (click)="sortMiddleNameAsc()">↑</button>
+            <button type="button" (click)="sortMiddleNameDesc()">↓</button>
+          </th>
+          <th>Средняя оценка
+            <button type="button" (click)="sortAverageMarkAsc()">↑</button>
+            <button type="button" (click)="sortAverageMarkDesc()">↓</button>
+          </th>
+          <th>Дата рождения
+            <button type="button" (click)="sortBirthAsc()">↑</button>
+            <button type="button" (click)="sortBirthDesc()">↓</button>
+          </th>
+          <th>Редактировать</th>
+          <th>Удалить</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        <tr *ngFor="let student of students" hand_over 
+          [class.higlited]="student.averageMark < 3 && isHighlighted"
+          [class.hiddenByBirth]="filterByDate(getBirthAsDate(student.birth))"
+          [class.hiddenByMark]="filterByAverageMark(student.averageMark)"
+          [class.firstNameFound]="findStudentByFirstName(student.firstName)"
+          [class.lastNameFound]="findStudentByLastName(student.lastName)">
+          <td>{{student.lastName | format_name}}</td>
+          <td>{{student.firstName | format_name}}</td>
+          <td>{{student.middleName | format_name}}</td>
+          <td [comment]="student.averageMark.toString()">{{student.averageMark | format_number}}</td>
+          <td>{{getBirth(student.birth)}}</td>
+          <td><button (click)="edit(student)">✐</button></td>
+          <td><button (click)="deleteByButton(student)">X</button></td>
+        </tr>
+      </tbody>
+    </table>
+  </section>
+  <section class="filter">
+
+    <form action="#" method="post">
+      <fieldset>
+        <input type="checkbox" id="checkHighlight" checked (change)="changeHighlight()">
+        <label for="checkHighlight">Выделить людей со средним баллом < 3.00</label>
+      </fieldset>
+      <h4>Поиск по имени или фамилии</h4>
+      <fieldset>
+        <input type="search" placeholder="Введите имя" name="first-name-input" [(ngModel)]="searchFirstName">
+        <br>
+        <input type="search" placeholder="Введите фамилию" name="last-name-input" [(ngModel)]="searchLastName">
+      </fieldset>
+
+      <h4>Поиск по дате рождения</h4>
+      <fieldset>
+        <label for="start-date-input">С </label>
+        <input #dateFromInput type="date" id="start-date-input">
+        <br>
+        <label for="end-date-input">По </label>
+        <input #dateToInput type="date" id="end-date-input">
+        <br>
+        <button type="button" (click)="dateFrom = dateFromInput.value; 
+                                       dateTo = dateToInput.value;">
+          Найти</button>
+        <button type="button" (click)="dateFrom = ''; dateTo = ''">Сбросить</button>
+      </fieldset>
+
+      <h4>Найти людей со средним баллом от: {{mark.value}}</h4>
+      <fieldset>
+        0<input #mark type="range" min="0" max="5" step="0.25" value="0">5
+        <br>
+        <button type="button" (click)="selectedAverageMark = mark.value;">Найти</button>
+        <button type="button" (click)="selectedAverageMark = '0'; mark.value = '0';">Сбросить</button>
+      </fieldset>
+    </form>
+  </section>
+
+  <section class="pop-up" *ngIf="showPopUp">
+    <div>
+      <p *ngIf="studentToDelete != null;">Будет удалена запись студента с именем:
+        {{studentToDelete.lastName}} {{studentToDelete.firstName}}</p>
+      <button type="button" (click)="confirm()">Подтвердить</button>
+      <button type="button" (click)="cancel()">Отменить</button>
+    </div>
+  </section>
+
+  <add-form *ngIf="editWindowShown" 
+            [student]="studentToEdit" 
+            (save)="save($event)" 
+            (cancelEdit)="cancelEdit()">
+  </add-form>
+</main>
