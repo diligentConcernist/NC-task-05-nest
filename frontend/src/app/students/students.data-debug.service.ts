@@ -57,7 +57,7 @@ export class DataDebugService {
   }
 
   delete(id: string): Observable<Student> | null {
-    const studentToDelete = this.students.find((s) => s.id?.toString() === id);
+    const studentToDelete = this.students.find((s) => s.id === id);
     if (studentToDelete != undefined) {
       return of(studentToDelete);
     }
