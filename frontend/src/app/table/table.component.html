@@ -34,7 +34,7 @@
       </thead>
 
       <tbody>
-        <tr *ngFor="let student of students" hand_over 
+        <tr *ngFor="let student of studentsService.students" hand_over 
           [class.higlited]="student.averageMark < 3 && isHighlighted"
           [class.hiddenByBirth]="filterByDate(getBirthAsDate(student.birth))"
           [class.hiddenByMark]="filterByAverageMark(student.averageMark)"
@@ -45,7 +45,7 @@
           <td>{{student.middleName | format_name}}</td>
           <td [comment]="student.averageMark.toString()">{{student.averageMark | format_number}}</td>
           <td>{{getBirth(student.birth)}}</td>
-          <td><button (click)="edit(student)">✐</button></td>
+          <td><button (click)="edit(student.id!)">✐</button></td>
           <td><button (click)="deleteByButton(student)">X</button></td>
         </tr>
       </tbody>

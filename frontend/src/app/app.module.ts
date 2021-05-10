@@ -12,6 +12,8 @@ import { AppComponent } from "./app.component";
 import { RouterModule, Routes } from "@angular/router";
 import { AddFormComponent } from "./table/add-form/add-form.component";
 import { NotFoundComponent } from "./not-found/not-found.component";
+import { studentServiceProvider } from "./students/service-provider";
+import { HttpClientModule } from "@angular/common/http";
 
 const appRoutes: Routes = [
   { path: "", component: TableComponent,
@@ -36,10 +38,11 @@ const appRoutes: Routes = [
     AddFormModule,
     BrowserModule,
     FormsModule,
+    HttpClientModule,
     ReactiveFormsModule,
     RouterModule.forRoot(appRoutes),
   ],
-  providers: [],
+  providers: [studentServiceProvider],
   bootstrap: [AppComponent]
 })
 export class AppModule {

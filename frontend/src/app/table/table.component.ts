@@ -1,6 +1,8 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, DoCheck, OnInit } from "@angular/core";
-import { Student } from "../student";
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, DoCheck, Inject, OnInit } from "@angular/core";
+import { Student } from "../students/student";
 import { ActivatedRoute, NavigationCancel, Router } from "@angular/router";
+import { DataDebugService } from "../students/students.data-debug.service";
+import { STUDENT_SERVICE } from "../students/service-provider";
 
 @Component({
   selector: "app-table",
@@ -31,20 +33,17 @@ export class TableComponent implements OnInit, DoCheck {
   studentToEdit: Student | null = null;
 
   constructor(private cdr: ChangeDetectorRef,
+    @Inject(STUDENT_SERVICE) public studentsService: DataDebugService,
     private router: Router) {
-    setTimeout(() => {
-      this.cdr.detectChanges();
-    }, 1000);
   }
 
   ngOnInit(): void {
-    fetch("/assets/students-list.json")
-      .then(res => res.json())
-      .then(async (data) => {
-        await new Promise((res) => setTimeout(res, 100));
-        this.fetched = true;
-        this.students = data;
-      });
+    this.studentsService.getStudents().subscribe(() => {
+      this.cdr.detectChanges();
+    });
+    setTimeout(() => {
+      this.cdr.detectChanges();
+    }, 1000);
   }
 
   ngDoCheck(): void {
@@ -241,11 +240,16 @@ export class TableComponent implements OnInit, DoCheck {
   }
 
   confirm(): void {
-    if (this.students) {
-      this.students = this.students.filter(item => item !== this.studentToDelete);
-      this.showPopUp = !this.showPopUp;
-      this.studentToDelete = null;
+    if(this.studentToDelete != null && this.studentsService != null) {
+      if (this.studentToDelete.id != undefined) {
+        this.studentsService.delete(this.studentToDelete.id)?.subscribe(
+          (data: Student) => {
+          this.studentsService.students = this.studentsService.students.filter(item => item !== this.studentToDelete);
+          this.studentToDelete = null;
+        });
+      }
     }
+    this.showPopUp = !this.showPopUp;
   }
 
   cancel(): void {
@@ -264,9 +268,9 @@ export class TableComponent implements OnInit, DoCheck {
     this.editWindowShown = false;
   }
 
-  edit(student: Student | null): void {
-    this.editWindowShown = true;
-    this.studentToEdit = student;
+  edit(id: string): void {
+    const url = '/edit/' + id;
+    this.router.navigateByUrl(url);
   }
 
   cancelEdit(): void {

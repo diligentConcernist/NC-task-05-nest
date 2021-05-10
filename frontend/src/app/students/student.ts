@@ -4,5 +4,5 @@ export interface Student {
     middleName: string,
     birth: string,
     averageMark: number,
-    id: number
+    id?: string
 }

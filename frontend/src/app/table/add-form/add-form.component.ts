@@ -1,8 +1,11 @@
-import { ChangeDetectionStrategy, Component, EventEmitter, Input, OnChanges, OnInit, Output } from "@angular/core";
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, Inject, Input, OnChanges, OnInit, Output } from "@angular/core";
 import { AbstractControl, FormControl, FormGroup, Validators } from "@angular/forms";
-import { Router } from "@angular/router";
+import { ActivatedRoute, Router } from "@angular/router";
+import { Subscription } from "rxjs";
+import { STUDENT_SERVICE } from "src/app/students/service-provider";
+import { DataDebugService } from "src/app/students/students.data-debug.service";
 
-import { Student } from "../../student";
+import { Student } from "../../students/student";
 import { dateValidator } from "./date-validator";
 import { nameValidator } from "./name-validator";
 
@@ -15,39 +18,71 @@ import { nameValidator } from "./name-validator";
 
 export class AddFormComponent implements OnInit, OnChanges {
   studentForm: Student | null = null;
-  idControl: number = 12;
-
-  @Input() set student(student_: Student | null) {
-    this.studentForm = student_;
-  }
+  id: string | null = null; 
+  private routeSubs: Subscription;
+  private studentSubs: Subscription | undefined;
+  
 
   @Output() save = new EventEmitter<Student>();
   @Output() cancelEdit = new EventEmitter();
 
-  constructor(private router: Router) {
+  constructor(private route: ActivatedRoute,
+    @Inject(STUDENT_SERVICE) public studentsService: DataDebugService,
+    private router: Router,
+    private cdr: ChangeDetectorRef,
+    ) {
 
+    this.routeSubs = this.route.params.subscribe(
+      (params) => {
+        if (params["id"]) {
+          this.id = params["id"];
+        }
+      },
+    );
   }
 
   form = new FormGroup({
     fullName: new FormGroup({
-      lastName: new FormControl(this.student?.lastName,
+      lastName: new FormControl(this.studentForm?.lastName,
         [Validators.required, Validators.minLength(2),
          Validators.pattern("^[A-Za-zА-Яа-яЁё]+$")]),
-      firstName: new FormControl(this.student?.firstName,
+      firstName: new FormControl(this.studentForm?.firstName,
         [Validators.required, Validators.minLength(2),
          Validators.pattern("^[A-Za-zА-Яа-яЁё]+$")]),
-      middleName: new FormControl(this.student?.middleName,
+      middleName: new FormControl(this.studentForm?.middleName,
         [Validators.required, Validators.minLength(2),
          Validators.pattern("^[A-Za-zА-Яа-яЁё]+$")])
     }, { validators: nameValidator }),
-    birth: new FormControl(this.student?.birth,
+    birth: new FormControl(this.studentForm?.birth,
       [Validators.required, dateValidator]),
-    averageMark: new FormControl(this.student?.averageMark,
+    averageMark: new FormControl(this.studentForm?.averageMark,
       [Validators.required, Validators.min(0), Validators.max(5)])
   });
 
   ngOnInit(): void {
 
+  }
+
+  ngAfterContentChecked (): void {
+    if (this.id !== null) {
+      this.studentSubs = this.studentsService.getById(this.id)?.subscribe(
+        (data: Student) => {
+          this.studentForm = data;
+          if (this.studentForm) {
+            this.form.setValue({
+              fullName: {
+                firstName: this.studentForm.firstName,
+                lastName: this.studentForm.lastName,
+                middleName: this.studentForm.middleName,
+              },
+              birth: this.studentForm.birth,
+              averageMark: this.studentForm.averageMark,
+            });
+            this.cdr.detectChanges();
+          }
+        },
+      );
+    }
   }
 
   ngOnChanges(): void {
@@ -74,15 +109,25 @@ export class AddFormComponent implements OnInit, OnChanges {
         lastName: this.form.value.fullName.lastName,
         middleName: this.form.value.fullName.middleName,
         birth: this.form.value.birth,
-        averageMark: this.form.value.averageMark,
-        id: this.idControl
+        averageMark: this.form.value.averageMark
       };
-      this.idControl++; 
-      this.save.emit(student);
-      if (this.studentForm !== null) {
-        this.studentForm = null;
+      if (this.id === null) {
+        this.studentsService.create(student).subscribe(
+          (data: Student) => {
+            const receivedStudent = data;
+            this.studentsService.students.splice(this.studentsService.students.length, 0, receivedStudent);
+            this.form.reset();
+          });
+      } else {
+        this.studentsService.update(student, this.id).subscribe(
+          (data: Student) => {
+            const receivedStudent = data;
+            const index = this.studentsService.students.indexOf(receivedStudent);
+            this.studentsService.students.splice(index, 1, receivedStudent);
+            this.studentForm = null;
+            this.form.reset();
+          });
       }
-      this.form.reset();
     } else {
       this.form.markAllAsTouched();
     }
