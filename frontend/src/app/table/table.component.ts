@@ -1,14 +1,14 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, DoCheck, OnInit } from "@angular/core";
-import { Student } from "./student";
+import { Student } from "../student";
 
 @Component({
   selector: "app-root",
-  templateUrl: "./app.component.html",
-  styleUrls: ["./app.component.css"],
+  templateUrl: "./table.component.html",
+  styleUrls: ["./table.component.css"],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 
-export class AppComponent implements OnInit, DoCheck {
+export class TableComponent implements OnInit, DoCheck {
   fetched: boolean = false;
   students: Student[] = [];
 
