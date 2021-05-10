@@ -98,5 +98,12 @@
     </div>
   </section>
 
+  <section class="pop-up" *ngIf="accessDenied">
+    <div>
+      <p>Запрещено редактировать студентов с оценкой "5"</p>
+      <button type="button" (click)="accessDenied = !accessDenied">Закрыть</button>
+    </div>
+  </section>
+
   <router-outlet></router-outlet>
 </main>

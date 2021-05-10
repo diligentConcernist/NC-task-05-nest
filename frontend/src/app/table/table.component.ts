@@ -24,6 +24,7 @@ export class TableComponent implements OnInit {
 
   showPopUp: boolean = false;
   editWindowShown: boolean = false;
+  accessDenied = false;
 
   selectedAverageMark: string = "";
 
@@ -35,6 +36,11 @@ export class TableComponent implements OnInit {
   constructor(private cdr: ChangeDetectorRef,
     @Inject(STUDENT_SERVICE) public studentsService: DataDebugService,
     private router: Router) {
+      this.router.events.subscribe((event) => {
+        if (event instanceof NavigationCancel) {
+          this.accessDenied = !this.accessDenied;
+        }
+      });
   }
 
   ngOnInit(): void {

@@ -14,12 +14,13 @@ import { AddFormComponent } from "./table/add-form/add-form.component";
 import { NotFoundComponent } from "./not-found/not-found.component";
 import { studentServiceProvider } from "./students/service-provider";
 import { HttpClientModule } from "@angular/common/http";
+import { AddFormGuard } from "./table/add-form/add-form.guard";
 
 const appRoutes: Routes = [
   { path: "", component: TableComponent,
     children: [
       { path: "add", component: AddFormComponent},
-      { path: "edit/:id", component: AddFormComponent}
+      { path: "edit/:id", component: AddFormComponent, canActivate: [AddFormGuard]}
     ] 
   },
   { path: "**", component: NotFoundComponent},
@@ -42,7 +43,9 @@ const appRoutes: Routes = [
     ReactiveFormsModule,
     RouterModule.forRoot(appRoutes),
   ],
-  providers: [studentServiceProvider],
+  providers: [
+    studentServiceProvider,
+    AddFormGuard],
   bootstrap: [AppComponent]
 })
 export class AppModule {
