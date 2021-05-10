@@ -11,7 +11,7 @@ import { STUDENT_SERVICE } from "../students/service-provider";
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 
-export class TableComponent implements OnInit, DoCheck {
+export class TableComponent implements OnInit {
   fetched: boolean = false;
   students: Student[] = [];
 
@@ -41,13 +41,6 @@ export class TableComponent implements OnInit, DoCheck {
     this.studentsService.getStudents().subscribe(() => {
       this.cdr.detectChanges();
     });
-    setTimeout(() => {
-      this.cdr.detectChanges();
-    }, 1000);
-  }
-
-  ngDoCheck(): void {
-    this.cdr.detectChanges();
   }
 
   private sortAscending(a: string | number | Date,

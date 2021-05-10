@@ -64,7 +64,7 @@ export class AddFormComponent implements OnInit, OnChanges {
   }
 
   ngAfterContentChecked (): void {
-    if (this.id !== null) {
+    if (this.id !== null && this.form.dirty == false) {
       this.studentSubs = this.studentsService.getById(this.id)?.subscribe(
         (data: Student) => {
           this.studentForm = data;
@@ -78,7 +78,6 @@ export class AddFormComponent implements OnInit, OnChanges {
               birth: this.studentForm.birth,
               averageMark: this.studentForm.averageMark,
             });
-            this.cdr.detectChanges();
           }
         },
       );
