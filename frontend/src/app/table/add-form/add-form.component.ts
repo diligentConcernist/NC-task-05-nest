@@ -1,5 +1,6 @@
 import { ChangeDetectionStrategy, Component, EventEmitter, Input, OnChanges, OnInit, Output } from "@angular/core";
 import { AbstractControl, FormControl, FormGroup, Validators } from "@angular/forms";
+import { Router } from "@angular/router";
 
 import { Student } from "../../student";
 import { dateValidator } from "./date-validator";
@@ -14,6 +15,7 @@ import { nameValidator } from "./name-validator";
 
 export class AddFormComponent implements OnInit, OnChanges {
   studentForm: Student | null = null;
+  idControl: number = 12;
 
   @Input() set student(student_: Student | null) {
     this.studentForm = student_;
@@ -21,6 +23,10 @@ export class AddFormComponent implements OnInit, OnChanges {
 
   @Output() save = new EventEmitter<Student>();
   @Output() cancelEdit = new EventEmitter();
+
+  constructor(private router: Router) {
+
+  }
 
   form = new FormGroup({
     fullName: new FormGroup({
@@ -68,8 +74,10 @@ export class AddFormComponent implements OnInit, OnChanges {
         lastName: this.form.value.fullName.lastName,
         middleName: this.form.value.fullName.middleName,
         birth: this.form.value.birth,
-        averageMark: this.form.value.averageMark
+        averageMark: this.form.value.averageMark,
+        id: this.idControl
       };
+      this.idControl++; 
       this.save.emit(student);
       if (this.studentForm !== null) {
         this.studentForm = null;
@@ -108,6 +116,7 @@ export class AddFormComponent implements OnInit, OnChanges {
     this.cancelEdit.emit();
     this.studentForm = null;
     this.form.reset();
+    this.router.navigateByUrl('/');
   }
 
   check(control: AbstractControl | null): boolean {

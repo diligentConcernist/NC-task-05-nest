@@ -8,9 +8,24 @@ import { TableComponent } from "./table/table.component";
 import { HandOverDirective } from "./common/common.hand-over.directive";
 import { NameFormat } from "./common/common.name-format.pipe";
 import { NumberFormat } from "./common/common.number-format.pipe";
+import { AppComponent } from "./app.component";
+import { RouterModule, Routes } from "@angular/router";
+import { AddFormComponent } from "./table/add-form/add-form.component";
+import { NotFoundComponent } from "./not-found/not-found.component";
+
+const appRoutes: Routes = [
+  { path: "", component: TableComponent,
+    children: [
+      { path: "add", component: AddFormComponent},
+      { path: "edit/:id", component: AddFormComponent}
+    ] 
+  },
+  { path: "**", component: NotFoundComponent},
+];
 
 @NgModule({
   declarations: [
+    AppComponent,
     TableComponent,
     CommentDirective,
     HandOverDirective,
@@ -22,9 +37,10 @@ import { NumberFormat } from "./common/common.number-format.pipe";
     BrowserModule,
     FormsModule,
     ReactiveFormsModule,
+    RouterModule.forRoot(appRoutes),
   ],
   providers: [],
-  bootstrap: [TableComponent]
+  bootstrap: [AppComponent]
 })
 export class AppModule {
 }

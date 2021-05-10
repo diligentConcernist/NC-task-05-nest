@@ -1,8 +1,9 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, DoCheck, OnInit } from "@angular/core";
 import { Student } from "../student";
+import { ActivatedRoute, NavigationCancel, Router } from "@angular/router";
 
 @Component({
-  selector: "app-root",
+  selector: "app-table",
   templateUrl: "./table.component.html",
   styleUrls: ["./table.component.css"],
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -29,7 +30,8 @@ export class TableComponent implements OnInit, DoCheck {
 
   studentToEdit: Student | null = null;
 
-  constructor(private cdr: ChangeDetectorRef) {
+  constructor(private cdr: ChangeDetectorRef,
+    private router: Router) {
     setTimeout(() => {
       this.cdr.detectChanges();
     }, 1000);
@@ -270,5 +272,9 @@ export class TableComponent implements OnInit, DoCheck {
   cancelEdit(): void {
     this.studentToEdit = null;
     this.editWindowShown = false;
+  }
+
+  add(): void {
+    this.router.navigateByUrl('/add');
   }
 }

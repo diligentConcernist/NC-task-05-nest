@@ -4,7 +4,7 @@
 
 <main>
   <section class="table-wrapper">
-    <button type="button" (click)="edit(null)">Добавить студента</button>
+    <button type="button" (click)="add()">Добавить студента</button>
     <table>
       <thead>
         <tr>
@@ -98,9 +98,5 @@
     </div>
   </section>
 
-  <add-form *ngIf="editWindowShown" 
-            [student]="studentToEdit" 
-            (save)="save($event)" 
-            (cancelEdit)="cancelEdit()">
-  </add-form>
+  <router-outlet></router-outlet>
 </main>
