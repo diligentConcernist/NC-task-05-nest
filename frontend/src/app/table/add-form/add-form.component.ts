@@ -4,6 +4,7 @@ import { ActivatedRoute, Router } from "@angular/router";
 import { Subscription } from "rxjs";
 import { STUDENT_SERVICE } from "src/app/students/service-provider";
 import { DataDebugService } from "src/app/students/students.data-debug.service";
+import { DataService } from "src/app/students/students.data.service";
 
 import { Student } from "../../students/student";
 import { dateValidator } from "./date-validator";
@@ -21,13 +22,14 @@ export class AddFormComponent implements OnInit, OnChanges {
   id: string | null = null; 
   private routeSubs: Subscription;
   private studentSubs: Subscription | undefined;
-  
+  private querySubs: Subscription;
 
   @Output() save = new EventEmitter<Student>();
   @Output() cancelEdit = new EventEmitter();
+  debug: boolean = false;
 
   constructor(private route: ActivatedRoute,
-    @Inject(STUDENT_SERVICE) public studentsService: DataDebugService,
+    @Inject(STUDENT_SERVICE) public studentsService: DataService | DataDebugService,
     private router: Router,
     private cdr: ChangeDetectorRef,
     ) {
@@ -36,6 +38,13 @@ export class AddFormComponent implements OnInit, OnChanges {
       (params) => {
         if (params["id"]) {
           this.id = params["id"];
+        }
+      },
+    );
+    this.querySubs = this.route.queryParams.subscribe(
+      (queryParam) => {
+        if (queryParam["debug"]) {
+          this.debug = queryParam["debug"];
         }
       },
     );
@@ -118,10 +127,12 @@ export class AddFormComponent implements OnInit, OnChanges {
             this.form.reset();
           });
       } else {
+        const editableStudent = this.studentsService.students.find((s) => s.id?.toString() === this.id);
         this.studentsService.update(student, this.id).subscribe(
           (data: Student) => {
             const receivedStudent = data;
-            const index = this.studentsService.students.indexOf(receivedStudent);
+            console.log(data);
+            const index = this.studentsService.students.indexOf(editableStudent!);
             this.studentsService.students.splice(index, 1, receivedStudent);
             this.studentForm = null;
             this.form.reset();

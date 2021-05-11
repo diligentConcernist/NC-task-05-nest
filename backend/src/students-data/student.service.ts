@@ -22,30 +22,6 @@ export class StudentService {
     id: "2"
   },
   {
-    lastName: "Алексеев",
-    firstName: "Захар",
-    middleName: "Матвеевич",
-    averageMark: 3.01,
-    birth: "1970-05-04",
-    id: "3"
-  },
-  {
-    lastName: "Андреева",
-    firstName: "Полина",
-    middleName: "Дмитриевна",
-    averageMark: 2.95,
-    birth: "1986-10-06",
-    id: "4"
-  },
-  {
-    lastName: "Андреева",
-    firstName: "Валерия",
-    middleName: "Григорьевна",
-    averageMark: 3.45,
-    birth: "1981-03-23",
-    id: "5"
-  },
-  {
     lastName: "Борисов",
     firstName: "Александр",
     middleName: "Маркович",

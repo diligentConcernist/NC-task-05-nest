@@ -19,16 +19,9 @@ export class DataDebugService {
       .pipe(tap(
         data => {
           this.students = JSON.parse(data, function (key: string, value: string): string | Date | number | Student {
-            if (key === "dateOfBirth") {
-              return new Date(value);
-            }
-            if (key === "score") {
-              return Number(value);
-            }
             return value;
           });
           this.students = this.students.slice();
-          console.log(this.students)
         }));
       }
 
@@ -49,10 +42,7 @@ export class DataDebugService {
   }
 
   update(student: Student, id: string): Observable<Student> {
-    const updatedStudent = {
-      ...student,
-      id: id,
-    };
+    const updatedStudent = student;
     return of(updatedStudent);
   }
 

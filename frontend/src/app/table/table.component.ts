@@ -3,6 +3,8 @@ import { Student } from "../students/student";
 import { ActivatedRoute, NavigationCancel, Router } from "@angular/router";
 import { DataDebugService } from "../students/students.data-debug.service";
 import { STUDENT_SERVICE } from "../students/service-provider";
+import { Subscription } from "rxjs";
+import { DataService } from "../students/students.data.service";
 
 @Component({
   selector: "app-table",
@@ -33,14 +35,24 @@ export class TableComponent implements OnInit {
 
   studentToEdit: Student | null = null;
 
+  private querySubs: Subscription;
+  debug: boolean = false;
+
   constructor(private cdr: ChangeDetectorRef,
-    @Inject(STUDENT_SERVICE) public studentsService: DataDebugService,
-    private router: Router) {
+    @Inject(STUDENT_SERVICE) public studentsService: DataService | DataDebugService,
+    private router: Router, private route: ActivatedRoute,) {
       this.router.events.subscribe((event) => {
         if (event instanceof NavigationCancel) {
           this.accessDenied = !this.accessDenied;
         }
       });
+      this.querySubs = route.queryParams.subscribe(
+        (queryParam: { [x: string]: boolean; }) => {
+          if (queryParam["debug"]) {
+            this.debug = queryParam["debug"];
+          }
+        },
+      );
   }
 
   ngOnInit(): void {
@@ -269,7 +281,11 @@ export class TableComponent implements OnInit {
 
   edit(id: string): void {
     const url = '/edit/' + id;
-    this.router.navigateByUrl(url);
+    if (this.debug) {
+      this.router.navigateByUrl(url + "?debug=true");
+    } else {
+      this.router.navigateByUrl(url);
+    }
   }
 
   cancelEdit(): void {
@@ -278,6 +294,10 @@ export class TableComponent implements OnInit {
   }
 
   add(): void {
-    this.router.navigateByUrl('/add');
+    if (this.debug) {
+      this.router.navigateByUrl("/add" + "?debug=true");
+    } else {
+      this.router.navigateByUrl("/add");
+    }
   }
 }
